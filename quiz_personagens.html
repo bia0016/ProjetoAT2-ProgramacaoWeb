@@ -1,0 +1,342 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  #quiz-wrap {
+    font-family: 'DM Sans', sans-serif;
+    padding: 2rem 1rem;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  #quiz-header {
+    margin-bottom: 2rem;
+  }
+
+  #quiz-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--color-text-primary);
+    letter-spacing: -0.5px;
+  }
+
+  #progress-bar-wrap {
+    margin-top: 10px;
+    height: 4px;
+    background: var(--color-border-tertiary);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  #progress-bar {
+    height: 100%;
+    background: #7F77DD;
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  #pergunta-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: 6px;
+  }
+
+  #pergunta-texto {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+  }
+
+  .opcao-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 14px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+
+  .opcao-btn:hover {
+    border-color: #7F77DD;
+    background: var(--color-background-secondary);
+    transform: translateX(3px);
+  }
+
+  .opcao-btn.selecionada {
+    border: 2px solid #7F77DD;
+    background: #EEEDFE;
+    color: #3C3489;
+    font-weight: 500;
+  }
+
+  #resultado-section {
+    display: none;
+  }
+
+  #resultado-titulo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--color-text-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  .personagem-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .personagem-card.vencedor {
+    border: 2px solid #1D9E75;
+    background: #E1F5EE;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .avatar-gabriel { background: #EEEDFE; color: #3C3489; }
+  .avatar-beatriz  { background: #FBEAF0; color: #72243E; }
+  .avatar-leonice  { background: #E1F5EE; color: #085041; }
+
+  .personagem-info { flex: 1; }
+
+  .personagem-nome {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--color-text-primary);
+    text-transform: capitalize;
+  }
+
+  .personagem-card.vencedor .personagem-nome {
+    color: #085041;
+  }
+
+  .barra-wrap {
+    margin-top: 6px;
+    height: 6px;
+    background: var(--color-border-tertiary);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .barra-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.6s ease;
+  }
+
+  .barra-gabriel { background: #7F77DD; }
+  .barra-beatriz  { background: #D4537E; }
+  .barra-leonice  { background: #1D9E75; }
+
+  .pontuacao-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-text-primary);
+    flex-shrink: 0;
+  }
+
+  .personagem-card.vencedor .pontuacao-num {
+    color: #0F6E56;
+  }
+
+  .badge-vencedor {
+    font-size: 11px;
+    font-weight: 500;
+    background: #9FE1CB;
+    color: #085041;
+    border-radius: var(--border-radius-md);
+    padding: 2px 8px;
+    margin-left: 8px;
+  }
+
+  #btn-reiniciar {
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 12px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  #btn-reiniciar:hover { background: var(--color-background-secondary); }
+</style>
+
+<div id="quiz-wrap">
+  <div id="pergunta-section">
+    <div id="quiz-header">
+      <h1>Quiz</h1>
+      <div id="progress-bar-wrap"><div id="progress-bar" style="width:0%"></div></div>
+      <p id="pergunta-label">Pergunta 1 de 2</p>
+    </div>
+    <p id="pergunta-texto"></p>
+    <div id="opcoes-wrap"></div>
+  </div>
+
+  <div id="resultado-section">
+    <p id="resultado-titulo">Resultado final</p>
+    <div id="cards-wrap"></div>
+    <button id="btn-reiniciar">Reiniciar quiz</button>
+  </div>
+</div>
+
+<script>
+const personagens = [
+  { id: 1, nome: 'gabriel', pontuacao: 0 },
+  { id: 2, nome: 'beatriz', pontuacao: 0 },
+  { id: 3, nome: 'leonice', pontuacao: 0 }
+];
+
+const perguntas = [
+  {
+    textopergunta: 'Pergunta 1',
+    respostas: [
+      { item: 'Resposta 1', pontuacoes: [{idPersonagem:1,pontuacao:10},{idPersonagem:2,pontuacao:20},{idPersonagem:3,pontuacao:30}] },
+      { item: 'Resposta 2', pontuacoes: [{idPersonagem:1,pontuacao:20},{idPersonagem:2,pontuacao:30},{idPersonagem:3,pontuacao:10}] },
+      { item: 'Resposta 3', pontuacoes: [{idPersonagem:1,pontuacao:30},{idPersonagem:2,pontuacao:10},{idPersonagem:3,pontuacao:20}] }
+    ]
+  },
+  {
+    textopergunta: 'Pergunta 2',
+    respostas: [
+      { item: 'Resposta 1', pontuacoes: [{idPersonagem:1,pontuacao:10},{idPersonagem:2,pontuacao:20},{idPersonagem:3,pontuacao:30}] },
+      { item: 'Resposta 2', pontuacoes: [{idPersonagem:1,pontuacao:20},{idPersonagem:2,pontuacao:30},{idPersonagem:3,pontuacao:10}] },
+      { item: 'Resposta 3', pontuacoes: [{idPersonagem:1,pontuacao:30},{idPersonagem:2,pontuacao:10},{idPersonagem:3,pontuacao:20}] }
+    ]
+  }
+];
+
+function atribuirResposta(pontuacoes) {
+  for (let i = 0; i < pontuacoes.length; i++) {
+    const p = personagens.find(p => p.id === pontuacoes[i].idPersonagem);
+    if (p) p.pontuacao += pontuacoes[i].pontuacao;
+  }
+}
+
+let perguntaAtual = 0;
+let respondidas = [];
+
+function renderPergunta() {
+  const p = perguntas[perguntaAtual];
+  const total = perguntas.length;
+
+  document.getElementById('progress-bar').style.width = ((perguntaAtual / total) * 100) + '%';
+  document.getElementById('pergunta-label').textContent = `Pergunta ${perguntaAtual + 1} de ${total}`;
+  document.getElementById('pergunta-texto').textContent = p.textopergunta;
+
+  const wrap = document.getElementById('opcoes-wrap');
+  wrap.innerHTML = '';
+
+  p.respostas.forEach((r, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opcao-btn';
+    btn.textContent = r.item;
+    btn.addEventListener('click', () => escolherResposta(idx, btn));
+    wrap.appendChild(btn);
+  });
+}
+
+function escolherResposta(idx, btnEl) {
+  document.querySelectorAll('.opcao-btn').forEach(b => {
+    b.classList.remove('selecionada');
+    b.disabled = true;
+  });
+  btnEl.classList.add('selecionada');
+
+  const pontuacoes = perguntas[perguntaAtual].respostas[idx].pontuacoes;
+  atribuirResposta(pontuacoes);
+  respondidas.push(idx);
+
+  setTimeout(() => {
+    perguntaAtual++;
+    if (perguntaAtual < perguntas.length) {
+      renderPergunta();
+    } else {
+      mostrarResultado();
+    }
+  }, 500);
+}
+
+function mostrarResultado() {
+  document.getElementById('pergunta-section').style.display = 'none';
+  const sec = document.getElementById('resultado-section');
+  sec.style.display = 'block';
+
+  const maxPontos = Math.max(...personagens.map(p => p.pontuacao));
+  const wrap = document.getElementById('cards-wrap');
+  wrap.innerHTML = '';
+
+  const avatarClass = { gabriel: 'avatar-gabriel', beatriz: 'avatar-beatriz', leonice: 'avatar-leonice' };
+  const barraClass  = { gabriel: 'barra-gabriel', beatriz: 'barra-beatriz',  leonice: 'barra-leonice'  };
+
+  const sorted = [...personagens].sort((a, b) => b.pontuacao - a.pontuacao);
+
+  sorted.forEach(p => {
+    const isVenc = p.pontuacao === maxPontos;
+    const pct = maxPontos > 0 ? Math.round((p.pontuacao / maxPontos) * 100) : 0;
+    const initials = p.nome.slice(0,2).toUpperCase();
+
+    const card = document.createElement('div');
+    card.className = 'personagem-card' + (isVenc ? ' vencedor' : '');
+    card.innerHTML = `
+      <div class="avatar ${avatarClass[p.nome] || 'avatar-gabriel'}">${initials}</div>
+      <div class="personagem-info">
+        <span class="personagem-nome">${p.nome}${isVenc ? '<span class="badge-vencedor">vencedor</span>' : ''}</span>
+        <div class="barra-wrap">
+          <div class="barra-fill ${barraClass[p.nome] || 'barra-gabriel'}" style="width:${pct}%"></div>
+        </div>
+      </div>
+      <span class="pontuacao-num">${p.pontuacao} pts</span>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+document.getElementById('btn-reiniciar').addEventListener('click', () => {
+  personagens.forEach(p => p.pontuacao = 0);
+  perguntaAtual = 0;
+  respondidas = [];
+  document.getElementById('resultado-section').style.display = 'none';
+  document.getElementById('pergunta-section').style.display = 'block';
+  renderPergunta();
+});
+
+renderPergunta();
+</script>

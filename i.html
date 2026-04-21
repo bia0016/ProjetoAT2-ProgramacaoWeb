@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 500px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            color: #444;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        button:hover {
+            background-color: #574fd6;
+        }
+
+        #resultado {
+            margin-top: 20px;
+        }
+
+        .personagem {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Quiz</h1>
+
+        <!-- Seção das perguntas -->
+        <div id="secao-pergunta">
+            <p id="texto-pergunta"></p>
+            <div id="opcoes"></div>
+        </div>
+
+        <!-- Seção do resultado (começa escondida) -->
+        <div id="secao-resultado" style="display: none;">
+            <h2>Resultado final</h2>
+            <div id="resultado"></div>
+            <button onclick="reiniciar()">Jogar de novo</button>
+        </div>
+    </div>
+
+    <script>
+
+        // =====================
+        // DADOS DO QUIZ
+        // =====================
+
+        const personagens = [
+            { id: 1, nome: 'Gabriel',  pontuacao: 0 },
+            { id: 2, nome: 'Beatriz',  pontuacao: 0 },
+            { id: 3, nome: 'Leonice',  pontuacao: 0 }
+        ]
+
+        const perguntas = [
+            {
+                textopergunta: 'Pergunta 1',
+                respostas: [
+                    {
+                        item: 'Resposta 1',
+                        pontuacoes: [
+                            { idPersonagem: 1, pontuacao: 10 },
+                            { idPersonagem: 2, pontuacao: 20 },
+                            { idPersonagem: 3, pontuacao: 30 }
+                        ]
+                    },
+                    {
+                        item: 'Resposta 2',
+                        pontuacoes: [
+                            { idPersonagem: 1, pontuacao: 20 },
+                            { idPersonagem: 2, pontuacao: 30 },
+                            { idPersonagem: 3, pontuacao: 10 }
+                        ]
+                    },
+                    {
+                        item: 'Resposta 3',
+                        pontuacoes: [
+                            { idPersonagem: 1, pontuacao: 30 },
+                            { idPersonagem: 2, pontuacao: 10 },
+                            { idPersonagem: 3, pontuacao: 20 }
+                        ]
+                    }
+                ]
+            },
+            {
+                textopergunta: 'Pergunta 2',
+                respostas: [
+                    {
+                        item: 'Resposta 1',
+                        pontuacoes: [
+                            { idPersonagem: 1, pontuacao: 10 },
+                            { idPersonagem: 2, pontuacao: 20 },
+                            { idPersonagem: 3, pontuacao: 30 }
+                        ]
+                    },
+                    {
+                        item: 'Resposta 2',
+                        pontuacoes: [
+                            { idPersonagem: 1, pontuacao: 20 },
+                            { idPersonagem: 2, pontuacao: 30 },
+                            { idPersonagem: 3, pontuacao: 10 }
+                        ]
+                    },
+                    {
+                        item: 'Resposta 3',
+                        pontuacoes: [
+                            { idPersonagem: 1, pontuacao: 30 },
+                            { idPersonagem: 2, pontuacao: 10 },
+                            { idPersonagem: 3, pontuacao: 20 }
+                        ]
+                    }
+                ]
+            }
+        ]
+
+
+        // =====================
+        // CONTROLE DO QUIZ
+        // =====================
+
+        let perguntaAtual = 0
+
+
+        // Essa função roda quando a página abre
+        function mostrarPergunta() {
+            // Pega a pergunta atual
+            const pergunta = perguntas[perguntaAtual]
+
+            // Coloca o texto da pergunta na tela
+            document.getElementById('texto-pergunta').textContent = pergunta.textopergunta
+
+            // Limpa os botões anteriores
+            document.getElementById('opcoes').innerHTML = ''
+
+            // Cria um botão para cada resposta
+            for (let i = 0; i < pergunta.respostas.length; i++) {
+                const resposta = pergunta.respostas[i]
+
+                const botao = document.createElement('button')
+                botao.textContent = resposta.item
+
+                // Quando clicar no botão, chama a função com as pontuações dessa resposta
+                botao.onclick = function() {
+                    atribuirResposta(resposta.pontuacoes)
+                    proximaPergunta()
+                }
+
+                document.getElementById('opcoes').appendChild(botao)
+            }
+        }
+
+
+        function atribuirResposta(pontuacoes) {
+            for (let i = 0; i < pontuacoes.length; i++) {
+                if (personagens[0].id === pontuacoes[i].idPersonagem) {
+                    personagens[0].pontuacao += pontuacoes[i].pontuacao
+                } else if (personagens[1].id === pontuacoes[i].idPersonagem) {
+                    personagens[1].pontuacao += pontuacoes[i].pontuacao
+                } else if (personagens[2].id === pontuacoes[i].idPersonagem) {
+                    personagens[2].pontuacao += pontuacoes[i].pontuacao
+                }
+            }
+        }
+
+
+        function proximaPergunta() {
+            perguntaAtual++
+
+            // Se ainda tem perguntas, mostra a próxima
+            if (perguntaAtual < perguntas.length) {
+                mostrarPergunta()
+            } else {
+                // Se acabou, mostra o resultado
+                mostrarResultado()
+            }
+        }
+
+
+        function mostrarResultado() {
+            // Esconde a seção de perguntas
+            document.getElementById('secao-pergunta').style.display = 'none'
+
+            // Mostra a seção de resultado
+            document.getElementById('secao-resultado').style.display = 'block'
+
+            // Monta o HTML do resultado
+            let html = ''
+
+            for (let i = 0; i < personagens.length; i++) {
+                html += '<div class="personagem">'
+                html += personagens[i].nome + ': ' + personagens[i].pontuacao + ' pontos'
+                html += '</div>'
+            }
+
+            document.getElementById('resultado').innerHTML = html
+        }
+
+
+        function reiniciar() {
+            // Zera as pontuações
+            personagens[0].pontuacao = 0
+            personagens[1].pontuacao = 0
+            personagens[2].pontuacao = 0
+
+            // Volta para a primeira pergunta
+            perguntaAtual = 0
+
+            // Mostra a seção de perguntas de novo
+            document.getElementById('secao-pergunta').style.display = 'block'
+            document.getElementById('secao-resultado').style.display = 'none'
+
+            mostrarPergunta()
+        }
+
+
+        // Inicia o quiz
+        mostrarPergunta()
+
+    </script>
+
+</body>
+</html>

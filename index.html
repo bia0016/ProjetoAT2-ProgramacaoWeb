@@ -7,42 +7,18 @@
     <title>Quiz sobre personagens</title>
 </head>
 <body>
-    <h1>Quiz sobre personagens</h1>
-    <hr>
-    <h2>História</h2>
-    <hr>
-    <h3>Pergunta 1</h3>
-    <!--<p>Conteudo da pergunta</p>
-    <input type="radio">opcao1
-    <input type="radio">opcao2
-    <input type="radio">opcao3
-    
-    <input type="radio" id="opcao1" name="escolha" value="1">
-    <label for="opcao1">Opção 1</label>
-    <input type="radio" id="opcao2" name="escolha" value="2">
-    <label for="opcao2">Opção 2</label>-->
-    <hr>
-    <h3>Pergunta 2</h3>
-    <hr>
-    <h3>Pergunta 3</h3>
-    <hr>
-    <h3>Pergunta 4</h3>
-    <hr>
-    <h3>Pergunta 5</h3>
-    <hr>
-    <h3>Pergunta 6</h3>
-    <hr>
-    <h3>Pergunta 7</h3>
-    <hr>
-    <h3>Pergunta 8</h3>
-    <hr>
-    <h3>Pergunta 9</h3>
-    <hr>
-    <h3>Pergunta 10</h3>
-    <hr>
-    <h2>Resultado</h2>
-    <button>recomeçar</button>
-
+    <div class="conteiner">
+        <h1>Quiz de Personagens | ...</h1>
+        <div id="secaoPergunta">
+            <p id="textoPergunta"></p>
+            <div id="opcoes"></div>
+        </div>
+        <div id="secaoResultado" style="display: none;">
+            <p id="textoResposta"></p>
+            <div id="resultado"></div>
+            <button onclick="reiniciar()">reiniciar</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
